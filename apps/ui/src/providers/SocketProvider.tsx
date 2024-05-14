@@ -1,24 +1,21 @@
-import { ReactNode, createContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useEffect } from 'react';
 import socketIO, { Socket } from 'socket.io-client';
+
+const socket = socketIO('http://localhost:3000');
 
 export const SocketContext = createContext<Socket | null>(null);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-  const [socket, setSocket] = useState<Socket | null>(null);
-
   useEffect(() => {
-    const socketIo = socketIO('http://localhost:3000');
-    setSocket(socketIo);
-
     const handleConnect = () => console.log('Connected to server');
     const handleDisconnect = () => console.log('Disconnected from server');
 
-    socketIo.on('connect', handleConnect);
-    socketIo.on('disconnect', handleDisconnect);
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
 
     return () => {
-      socketIo.off('connect', handleConnect);
-      socketIo.off('disconnect', handleDisconnect);
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
     };
   }, []);
   return (

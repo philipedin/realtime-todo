@@ -33,6 +33,12 @@ io.on('connection', (socket) => {
 
   socket.emit('todos', todos);
 
+  socket.on('createTodo', ({ title }: Pick<Todo, 'title'>) => {
+    const todo = { id: String(todos.length + 1), title };
+    todos.push(todo);
+    io.emit('todos', todos);
+  });
+
   socket.on('disconnect', () => {
     console.log('Connection closed');
   });
