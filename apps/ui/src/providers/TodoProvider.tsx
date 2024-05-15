@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Todo } from '@realtime-todo/types';
 import { SocketContext } from './SocketProvider';
+import { Todo } from '@realtime-todo/types';
 
 interface TodoProviderProps {
   children: React.ReactNode;

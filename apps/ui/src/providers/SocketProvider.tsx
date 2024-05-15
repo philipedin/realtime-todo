@@ -1,9 +1,15 @@
 import { ReactNode, createContext, useEffect } from 'react';
-import socketIO, { Socket } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '@realtime-todo/types';
 
-const socket = socketIO('http://localhost:3000');
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+  'http://localhost:3000'
+);
 
-export const SocketContext = createContext<Socket | null>(null);
+export const SocketContext = createContext<typeof socket | null>(null);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
