@@ -9,7 +9,8 @@
     "build": "npx nx run-many --target=build",
     "build:api": "nx build api",
     "build:ui": "nx build ui",
-    "test:ui": "nx test ui"
+    "test:ui": "nx test ui",
+    "reset": "nx reset"
   },
   "private": true,
   "dependencies": {
