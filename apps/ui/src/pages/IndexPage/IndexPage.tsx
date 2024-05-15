@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { Text, Box, Button, Input, Stack } from '@chakra-ui/react';
+
 import { useTodos } from '../../hooks/useTodos';
 
 export const IndexPage = () => {
@@ -9,29 +11,32 @@ export const IndexPage = () => {
     setInputText(e.target.value);
   };
 
-  const handleClickCreate = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     createTodo(inputText);
     setInputText('');
   };
+
   return (
-    <div>
-      <div>Welcome to Realtime Todo</div>
-      <div>
-        <input
-          type="text"
-          placeholder="New todo"
-          value={inputText}
-          onChange={handleTextChange}
-        />
-        <button onClick={handleClickCreate}>Create</button>
-      </div>
-      <div>
-        <ul>
-          {todos?.map((todo) => (
-            <li key={todo.id}>{todo.title}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <Box>
+      <form onSubmit={handleSubmit}>
+        <Stack direction="row" spacing={2}>
+          <Input
+            flex={1}
+            placeholder="New todo"
+            value={inputText}
+            onChange={handleTextChange}
+          />
+          <Button type="submit">Create</Button>
+        </Stack>
+      </form>
+      <Stack direction="column" my={8} spacing={4}>
+        {todos?.map((todo) => (
+          <Box key={todo.id} p={2}>
+            <Text fontWeight="bold">{todo.title}</Text>
+          </Box>
+        ))}
+      </Stack>
+    </Box>
   );
 };
