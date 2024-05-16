@@ -8,13 +8,12 @@ import {
   ServerToClientEvents,
   Todo,
 } from '@realtime-todo/types';
+import { getConfig } from './config/config';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-
+const config = getConfig();
 const app = express();
-
 const server = createServer(app);
+
 app.use(cors());
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
@@ -48,6 +47,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(port, host, () => {
-  console.log(`[ ready ] http://${host}:${port}`);
+server.listen(config.port, config.host, () => {
+  console.log(`[ ready ] http://${config.host}:${config.port}`);
 });
