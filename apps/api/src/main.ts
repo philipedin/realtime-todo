@@ -2,18 +2,25 @@ import cors from 'cors';
 import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-
 import {
   ClientToServerEvents,
   ServerToClientEvents,
   Todo,
 } from '@realtime-todo/types';
+
 import { getConfig } from './config/config';
+import { createLogger } from './logger/logger';
+import { createHttpLogger } from './middleware/httpLogger';
 
 const config = getConfig();
+const logger = createLogger(config);
+const httpLogger = createHttpLogger(config, logger);
 const app = express();
 const server = createServer(app);
 
+logger.debug(config, 'config');
+
+app.use(httpLogger);
 app.use(cors());
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
@@ -32,7 +39,7 @@ const todos: Todo[] = [
 ];
 
 io.on('connection', (socket) => {
-  console.log('Connection initiated');
+  logger.info('socket connection initiated');
 
   socket.emit('todos', todos);
 
@@ -43,10 +50,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('Connection closed');
+    logger.info('socket connection closed');
   });
 });
 
 server.listen(config.port, config.host, () => {
-  console.log(`[ ready ] http://${config.host}:${config.port}`);
+  logger.info(`ready at: http://${config.host}:${config.port}`);
 });
