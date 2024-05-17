@@ -1,6 +1,8 @@
-import pino from 'pino';
+import pino, { Logger as PinoLogger } from 'pino';
 
 import { Config } from '../config/config';
+
+export type Logger = PinoLogger;
 
 export const createLogger = (config: Config) =>
   pino({

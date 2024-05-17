@@ -43,6 +43,9 @@
       "options": {
         "buildTarget": "api:build"
       },
+      "dependsOn": [
+        "^build"
+      ],
       "configurations": {
         "development": {
           "buildTarget": "api:build:development"

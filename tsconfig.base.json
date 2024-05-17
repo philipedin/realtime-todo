@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@realtime-todo/interfaces": ["shared/interfaces/src/index.ts"],
       "@realtime-todo/types": ["shared/types/src/index.ts"]
     }
   },

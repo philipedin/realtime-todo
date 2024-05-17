@@ -2,15 +2,16 @@ import cors from 'cors';
 import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
+import { Todo } from '@realtime-todo/types';
 import {
   ClientToServerEvents,
   ServerToClientEvents,
-  Todo,
-} from '@realtime-todo/types';
+} from '@realtime-todo/interfaces';
 
 import { getConfig } from './config/config';
 import { createLogger } from './logger/logger';
-import { createHttpLogger } from './middleware/httpLogger';
+import { createHttpLogger } from './middleware/express/httpLogger';
+import { validateData } from './middleware/websockets/validateData';
 
 const config = getConfig();
 const logger = createLogger(config);
@@ -39,6 +40,7 @@ const todos: Todo[] = [
 ];
 
 io.on('connection', (socket) => {
+  socket.use(validateData(logger, socket));
   logger.info('socket connection initiated');
 
   socket.emit('todos', todos);
