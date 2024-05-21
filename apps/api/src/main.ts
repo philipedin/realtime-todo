@@ -2,7 +2,6 @@ import cors from 'cors';
 import express from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { Todo } from '@realtime-todo/types';
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -12,50 +11,63 @@ import { getConfig } from './config/config';
 import { createLogger } from './logger/logger';
 import { createHttpLogger } from './middleware/express/httpLogger';
 import { validateData } from './middleware/websockets/validateData';
+import { createTodoService } from './services/todo';
+import { TodoModel } from './models/todo';
+import { db } from './db/db';
 
 const config = getConfig();
 const logger = createLogger(config);
 const httpLogger = createHttpLogger(config, logger);
-const app = express();
-const server = createServer(app);
 
-logger.debug(config, 'config');
+const main = async () => {
+  const app = express();
+  const server = createServer(app);
+  const database = db(logger, config.mongodbUri);
+  await database.connect();
 
-app.use(httpLogger);
-app.use(cors());
+  logger.debug(config, 'config');
 
-const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
-  cors: {
-    origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
-  },
-});
+  app.use(httpLogger);
+  app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send({ message: 'Hello API' });
-});
-
-const todos: Todo[] = [
-  { id: '1', title: 'Todo 1' },
-  { id: '2', title: 'Todo 2' },
-];
-
-io.on('connection', (socket) => {
-  socket.use(validateData(logger, socket));
-  logger.info('socket connection initiated');
-
-  socket.emit('todos', todos);
-
-  socket.on('createTodo', ({ title }) => {
-    const todo = { id: String(todos.length + 1), title };
-    todos.push(todo);
-    io.emit('todos', todos);
+  const todoService = createTodoService(TodoModel);
+  const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
+    cors: {
+      origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
+    },
   });
 
-  socket.on('disconnect', () => {
-    logger.info('socket connection closed');
+  app.get('/', (req, res) => {
+    res.send({ message: 'Hello API' });
   });
-});
 
-server.listen(config.port, config.host, () => {
-  logger.info(`ready at: http://${config.host}:${config.port}`);
+  io.on('connection', async (socket) => {
+    logger.info('socket connection initiated');
+
+    socket.use(validateData(logger, socket));
+
+    const todos = await todoService.listTodos();
+
+    socket.emit('todos', todos);
+
+    socket.on('createTodo', async ({ title }) => {
+      await todoService.createTodo(title);
+      const todos = await todoService.listTodos();
+
+      io.emit('todos', todos);
+    });
+
+    socket.on('disconnect', () => {
+      logger.info('socket connection closed');
+    });
+  });
+
+  server.listen(config.port, config.host, () => {
+    logger.info(`ready at: http://${config.host}:${config.port}`);
+  });
+};
+
+main().catch((error) => {
+  logger.error(error, 'Unhandled error occurred');
+  process.exit(1);
 });

@@ -32,7 +32,7 @@ export const IndexPage = () => {
       </form>
       <Stack direction="column" my={8} spacing={4}>
         {todos?.map((todo) => (
-          <Box key={todo.id} p={2}>
+          <Box key={todo._id} p={2}>
             <Text fontWeight="bold">{todo.title}</Text>
           </Box>
         ))}

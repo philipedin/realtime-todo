@@ -1,5 +1,22 @@
 # Realtime Todo
 
+## Prerequisites
+
+- [Node v20](https://nodejs.org/en/download/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [nvm](https://github.com/nvm-sh/nvm) (Optional)
+
+## Setting Node Version with nvm (Optional)
+
+If you have nvm installed, you can set the Node.js version for this project by running `nvm use` in the project root directory.
+This will switch to the Node.js version specified in the .nvmrc file.
+
+## Start the database
+
+Run `docker compose up -d` to start the MongoDB database.
+
+Run `docker compose down` to stop the MongoDB database.
+
 ## Start the application
 
 Run `npx run dev` to start the all development servers (API + UI).
