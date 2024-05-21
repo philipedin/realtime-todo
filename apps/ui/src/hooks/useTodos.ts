@@ -16,5 +16,9 @@ export const useTodos = () => {
     socket.emit('createTodo', { title });
   };
 
-  return { todos, createTodo };
+  const updateTodo = (_id: string, done: boolean) => {
+    socket.emit('updateTodo', { _id, done });
+  };
+
+  return { todos, createTodo, updateTodo };
 };

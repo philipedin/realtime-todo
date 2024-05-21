@@ -12,8 +12,13 @@ export const createTodoService = (todoModel: Model<Todo>) => {
     return await newTodo.save();
   };
 
+  const updateTodo = async (id: string, done: boolean) => {
+    return await todoModel.findByIdAndUpdate(id, { done }, { new: true });
+  };
+
   return {
     listTodos,
     createTodo,
+    updateTodo,
   };
 };

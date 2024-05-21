@@ -1,11 +1,12 @@
 import { FormEvent, useState } from 'react';
-import { Text, Box, Button, Input, Stack } from '@chakra-ui/react';
+import { Box, Button, Input, Stack } from '@chakra-ui/react';
 
 import { useTodos } from '../../hooks/useTodos';
+import { TodoList } from '../../components/TodoList/TodoList';
 
 export const IndexPage = () => {
   const [inputText, setInputText] = useState('');
-  const { todos, createTodo } = useTodos();
+  const { todos, createTodo, updateTodo } = useTodos();
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -15,6 +16,10 @@ export const IndexPage = () => {
     e.preventDefault();
     createTodo(inputText);
     setInputText('');
+  };
+
+  const handleToggle = (id: string, done: boolean) => {
+    updateTodo(id, done);
   };
 
   return (
@@ -30,13 +35,7 @@ export const IndexPage = () => {
           <Button type="submit">Create</Button>
         </Stack>
       </form>
-      <Stack direction="column" my={8} spacing={4}>
-        {todos?.map((todo) => (
-          <Box key={todo._id} p={2}>
-            <Text fontWeight="bold">{todo.title}</Text>
-          </Box>
-        ))}
-      </Stack>
+      <TodoList todos={todos} onToggle={handleToggle} />
     </Box>
   );
 };

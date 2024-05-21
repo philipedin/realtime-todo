@@ -57,6 +57,13 @@ const main = async () => {
       io.emit('todos', todos);
     });
 
+    socket.on('updateTodo', async ({ _id, done }) => {
+      await todoService.updateTodo(_id, done);
+      const todos = await todoService.listTodos();
+
+      io.emit('todos', todos);
+    });
+
     socket.on('disconnect', () => {
       logger.info('socket connection closed');
     });
