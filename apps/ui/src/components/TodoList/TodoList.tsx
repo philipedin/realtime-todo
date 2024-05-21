@@ -9,7 +9,7 @@ interface TodoListProps {
 }
 
 export const TodoList = ({ todos, onToggle }: TodoListProps) => (
-  <Stack direction="column" my={8} spacing={4}>
+  <Stack direction="column" spacing={4}>
     {todos?.map((todo) => (
       <TodoItem key={todo._id} onToggle={onToggle} {...todo} />
     ))}
