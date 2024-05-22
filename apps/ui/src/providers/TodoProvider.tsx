@@ -10,7 +10,7 @@ export const TodoContext = createContext<Todo[] | null>(null);
 
 export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const socket = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
   useEffect(() => {
     if (!socket) return;

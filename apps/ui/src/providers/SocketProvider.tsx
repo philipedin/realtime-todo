@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect } from 'react';
+import { ReactNode, createContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import {
   ClientToServerEvents,
@@ -10,14 +10,25 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'http://localhost:3000'
 );
 
-export const SocketContext = createContext<typeof socket | null>(null);
+export const SocketContext = createContext<{
+  socket: typeof socket | null;
+  isInitialized: boolean;
+  isConnected: boolean;
+}>({ socket: null, isInitialized: false, isConnected: false });
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
   const toast = useToast();
 
   useEffect(() => {
-    const handleConnect = () => console.log('Connected to server');
-    const handleDisconnect = () => console.log('Disconnected from server');
+    const handleConnect = () => {
+      if (!isInitialized) {
+        setIsInitialized(true);
+      }
+      setIsConnected(true);
+    };
+    const handleDisconnect = () => setIsConnected(false);
     const handleError = ({ message }: { message: string }) =>
       toast({
         title: 'Server error',
@@ -36,8 +47,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       socket.off('disconnect', handleDisconnect);
       socket.off('error', handleError);
     };
-  }, [toast]);
+  }, [isInitialized, toast]);
   return (
-    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
+    <SocketContext.Provider value={{ socket, isInitialized, isConnected }}>
+      {children}
+    </SocketContext.Provider>
   );
 };
