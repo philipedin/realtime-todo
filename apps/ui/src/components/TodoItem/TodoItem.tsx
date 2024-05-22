@@ -6,10 +6,10 @@ import {
   Flex,
   Input,
 } from '@chakra-ui/react';
-import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 import { Todo } from '@realtime-todo/types';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface TodoItemProps extends Todo {
   onToggle: (id: string, done: boolean) => void;
@@ -28,20 +28,27 @@ export const TodoItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
 
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+
   const handleBlur = () => {
-    setIsEditing(false);
-    setEditedTitle(title);
+    handleCancelEdit();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      handleConfirm();
+      handleConfirmEdit();
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirmEdit = () => {
     setIsEditing(false);
     onUpdate(_id, editedTitle);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedTitle(title);
   };
 
   const handleRemove = () => {
@@ -63,7 +70,14 @@ export const TodoItem = ({
             mr={2}
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
-            onBlur={handleBlur}
+            onBlur={(e) => {
+              if (
+                e.relatedTarget !== confirmButtonRef.current &&
+                e.relatedTarget !== cancelButtonRef.current
+              ) {
+                handleBlur();
+              }
+            }}
             onKeyDown={handleKeyDown}
             autoFocus
           />
@@ -83,15 +97,22 @@ export const TodoItem = ({
       </Flex>
       <Stack direction="row">
         {isEditing ? (
-          <IconButton
-            aria-label="Confirm edit"
-            colorScheme="green"
-            icon={<CheckIcon />}
-            onMouseDown={(e) => {
-              e.preventDefault();
-              handleConfirm();
-            }}
-          />
+          <>
+            <IconButton
+              ref={confirmButtonRef}
+              aria-label="Confirm edit"
+              colorScheme="green"
+              icon={<CheckIcon />}
+              onClick={handleConfirmEdit}
+            />
+            <IconButton
+              ref={cancelButtonRef}
+              aria-label="Cancel edit"
+              colorScheme="red"
+              icon={<CloseIcon />}
+              onClick={handleCancelEdit}
+            />
+          </>
         ) : (
           <>
             <IconButton
