@@ -22,5 +22,9 @@ export const useTodos = () => {
     socket.emit('updateTodo', { _id, update });
   };
 
-  return { todos, createTodo, updateTodo };
+  const removeTodo = (_id: string) => {
+    socket.emit('removeTodo', { _id });
+  };
+
+  return { todos, createTodo, updateTodo, removeTodo };
 };

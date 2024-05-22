@@ -6,7 +6,7 @@ import {
   Flex,
   Input,
 } from '@chakra-ui/react';
-import { CheckIcon, EditIcon } from '@chakra-ui/icons';
+import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 import { Todo } from '@realtime-todo/types';
 import { useState } from 'react';
@@ -14,6 +14,7 @@ import { useState } from 'react';
 interface TodoItemProps extends Todo {
   onToggle: (id: string, done: boolean) => void;
   onUpdate: (id: string, title: string) => void;
+  onRemove: (id: string) => void;
 }
 
 export const TodoItem = ({
@@ -22,6 +23,7 @@ export const TodoItem = ({
   done,
   onToggle,
   onUpdate,
+  onRemove,
 }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
@@ -40,6 +42,10 @@ export const TodoItem = ({
   const handleConfirm = () => {
     setIsEditing(false);
     onUpdate(_id, editedTitle);
+  };
+
+  const handleRemove = () => {
+    onRemove(_id);
   };
 
   return (
@@ -87,12 +93,20 @@ export const TodoItem = ({
             }}
           />
         ) : (
-          <IconButton
-            isDisabled={done}
-            aria-label="Edit title"
-            icon={<EditIcon />}
-            onClick={() => setIsEditing(true)}
-          />
+          <>
+            <IconButton
+              isDisabled={done}
+              aria-label="Edit title"
+              icon={<EditIcon />}
+              onClick={() => setIsEditing(true)}
+            />
+            <IconButton
+              aria-label="Remove todo"
+              colorScheme="red"
+              icon={<DeleteIcon />}
+              onClick={handleRemove}
+            />
+          </>
         )}
       </Stack>
     </Flex>

@@ -12,9 +12,13 @@ const updateTodoSchema = z.object({
     })
     .partial(),
 });
+const removeTodoSchema = z.object({
+  _id: z.string(),
+});
 export interface ClientToServerEvents {
   createTodo: ({ title }: z.infer<typeof createTodoSchema>) => void;
   updateTodo: ({ _id, update }: z.infer<typeof updateTodoSchema>) => void;
+  removeTodo: ({ _id }: z.infer<typeof removeTodoSchema>) => void;
 }
 
 export interface ServerToClientEvents {
@@ -25,4 +29,5 @@ export interface ServerToClientEvents {
 export const clientToServerSchemas: Partial<Record<string, z.AnyZodObject>> = {
   createTodo: createTodoSchema,
   updateTodo: updateTodoSchema,
+  removeTodo: removeTodoSchema,
 };

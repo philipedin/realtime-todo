@@ -16,9 +16,14 @@ export const createTodoService = (todoModel: Model<Todo>) => {
     return await todoModel.findByIdAndUpdate(id, update, { new: true });
   };
 
+  const removeTodo = async (id: string) => {
+    return await todoModel.findByIdAndDelete(id);
+  };
+
   return {
     listTodos,
     createTodo,
     updateTodo,
+    removeTodo,
   };
 };
