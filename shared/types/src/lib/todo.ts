@@ -5,3 +5,5 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type TodoUpdate = Partial<Pick<Todo, 'done' | 'title'>>;

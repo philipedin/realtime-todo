@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 
-import { Todo } from '@realtime-todo/types';
+import { Todo, TodoUpdate } from '@realtime-todo/types';
 
 export const createTodoService = (todoModel: Model<Todo>) => {
   const listTodos = async () => {
@@ -12,8 +12,8 @@ export const createTodoService = (todoModel: Model<Todo>) => {
     return await newTodo.save();
   };
 
-  const updateTodo = async (id: string, done: boolean) => {
-    return await todoModel.findByIdAndUpdate(id, { done }, { new: true });
+  const updateTodo = async (id: string, update: TodoUpdate) => {
+    return await todoModel.findByIdAndUpdate(id, update, { new: true });
   };
 
   return {

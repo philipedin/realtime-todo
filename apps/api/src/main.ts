@@ -57,8 +57,8 @@ const main = async () => {
       io.emit('todos', todos);
     });
 
-    socket.on('updateTodo', async ({ _id, done }) => {
-      await todoService.updateTodo(_id, done);
+    socket.on('updateTodo', async ({ _id, update }) => {
+      await todoService.updateTodo(_id, update);
       const todos = await todoService.listTodos();
 
       io.emit('todos', todos);

@@ -11,11 +11,15 @@ export const IndexPage = () => {
   const [showDone, setShowDone] = useState(false);
 
   const handleTodoToggle = (id: string, done: boolean) => {
-    updateTodo(id, done);
+    updateTodo(id, { done });
   };
 
   const handleFilterToggle = () => {
     setShowDone(!showDone);
+  };
+
+  const handleTodoUpdate = (id: string, title: string) => {
+    updateTodo(id, { title });
   };
 
   const filteredTodos = useMemo(() => {
@@ -31,7 +35,11 @@ export const IndexPage = () => {
         <TodoFilterSwitch onToggle={handleFilterToggle} showDone={showDone} />
       </Box>
       <Box mt={8}>
-        <TodoList todos={filteredTodos} onToggle={handleTodoToggle} />
+        <TodoList
+          todos={filteredTodos}
+          onToggle={handleTodoToggle}
+          onUpdate={handleTodoUpdate}
+        />
       </Box>
     </>
   );

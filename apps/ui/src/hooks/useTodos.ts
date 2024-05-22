@@ -1,4 +1,6 @@
 import { useContext } from 'react';
+import { TodoUpdate } from '@realtime-todo/types';
+
 import { TodoContext } from '../providers/TodoProvider';
 import { SocketContext } from '../providers/SocketProvider';
 
@@ -16,8 +18,8 @@ export const useTodos = () => {
     socket.emit('createTodo', { title });
   };
 
-  const updateTodo = (_id: string, done: boolean) => {
-    socket.emit('updateTodo', { _id, done });
+  const updateTodo = (_id: string, update: TodoUpdate) => {
+    socket.emit('updateTodo', { _id, update });
   };
 
   return { todos, createTodo, updateTodo };
