@@ -71,6 +71,13 @@ const main = async () => {
       io.emit('todos', todos);
     });
 
+    socket.on('reorderTodos', async ({ order }) => {
+      await todoService.reorderTodos(order);
+      const todos = await todoService.listTodos();
+
+      io.emit('todos', todos);
+    });
+
     socket.on('disconnect', () => {
       logger.info('socket connection closed');
     });

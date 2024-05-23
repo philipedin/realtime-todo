@@ -23,6 +23,7 @@
     "env-var": "^7.4.2",
     "express": "^4.19.2",
     "framer-motion": "^11.2.2",
+    "lodash": "^4.17.21",
     "mongoose": "^8.4.0",
     "pino": "^9.1.0",
     "pino-http": "^10.1.0",

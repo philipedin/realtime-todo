@@ -7,7 +7,8 @@ import { CreateTodoForm } from '../../components/CreateTodoForm/CreateTodoForm';
 import { TodoFilterSwitch } from '../../components/TodoFilterSwitch/TodoFilterSwitch';
 
 export const IndexPage = () => {
-  const { todos, createTodo, updateTodo, removeTodo } = useTodos();
+  const { todos, createTodo, updateTodo, removeTodo, reorderTodos } =
+    useTodos();
   const [showDone, setShowDone] = useState(false);
 
   const handleTodoToggle = (id: string, done: boolean) => {
@@ -24,6 +25,10 @@ export const IndexPage = () => {
 
   const handleTodoRemove = (id: string) => {
     removeTodo(id);
+  };
+
+  const handleOrderChange = (order: string[]) => {
+    reorderTodos(order);
   };
 
   const filteredTodos = useMemo(() => {
@@ -44,6 +49,7 @@ export const IndexPage = () => {
           onToggle={handleTodoToggle}
           onUpdate={handleTodoUpdate}
           onRemove={handleTodoRemove}
+          onOrderChange={handleOrderChange}
         />
       </Box>
     </>

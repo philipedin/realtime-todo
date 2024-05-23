@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import {
   Checkbox,
   Text,
@@ -7,9 +8,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-
 import { Todo } from '@realtime-todo/types';
-import { useRef, useState } from 'react';
 
 interface TodoItemProps extends Todo {
   onToggle: (id: string, done: boolean) => void;

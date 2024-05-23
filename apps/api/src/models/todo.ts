@@ -6,6 +6,7 @@ const todoSchema = new Schema<Todo>(
   {
     title: { type: String, required: true },
     done: { type: Boolean, default: false },
+    order: { type: Number, required: true },
   },
   { timestamps: true }
 );

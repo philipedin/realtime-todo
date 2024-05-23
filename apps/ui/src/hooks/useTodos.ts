@@ -26,5 +26,9 @@ export const useTodos = () => {
     socket.emit('removeTodo', { _id });
   };
 
-  return { todos, createTodo, updateTodo, removeTodo };
+  const reorderTodos = (order: string[]) => {
+    socket.emit('reorderTodos', { order });
+  };
+
+  return { todos, createTodo, updateTodo, removeTodo, reorderTodos };
 };
