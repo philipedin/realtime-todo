@@ -54,38 +54,63 @@ const main = async () => {
     socket.emit('todos', todos);
 
     socket.on('createTodo', async ({ title }) => {
-      await todoService.createTodo(title);
-      const todos = await todoService.listTodos();
+      try {
+        await todoService.createTodo(title);
+        const todos = await todoService.listTodos();
 
-      io.emit('todos', todos);
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to create todo');
+        socket.emit('error', { message: 'Failed to create todo' });
+      }
     });
 
     socket.on('updateTodo', async ({ _id, update }) => {
-      await todoService.updateTodo(_id, update);
-      const todos = await todoService.listTodos();
+      try {
+        await todoService.updateTodo(_id, update);
+        const todos = await todoService.listTodos();
 
-      io.emit('todos', todos);
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to update todo');
+        socket.emit('error', { message: 'Failed to update todo' });
+      }
     });
 
     socket.on('removeTodo', async ({ _id }) => {
-      await todoService.removeTodo(_id);
-      const todos = await todoService.listTodos();
+      try {
+        await todoService.removeTodo(_id);
+        const todos = await todoService.listTodos();
 
-      io.emit('todos', todos);
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to remove todo');
+        socket.emit('error', { message: 'Failed to remove todo' });
+      }
     });
 
     socket.on('reorderTodos', async ({ order }) => {
-      await todoService.reorderTodos(order);
-      const todos = await todoService.listTodos();
+      try {
+        await todoService.reorderTodos(order);
+        const todos = await todoService.listTodos();
 
-      io.emit('todos', todos);
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to reorder todos');
+        socket.emit('error', { message: 'Failed to reorder todos' });
+      }
     });
 
     socket.on('createSubtask', async ({ todoId, title }) => {
-      await todoService.createSubtask(todoId, title);
-      const todos = await todoService.listTodos();
+      try {
+        await todoService.createSubtask(todoId, title);
+        const todos = await todoService.listTodos();
 
-      io.emit('todos', todos);
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to create subtask');
+        socket.emit('error', { message: 'Failed to create subtask' });
+      }
     });
 
     socket.on('disconnect', () => {

@@ -43,7 +43,6 @@ export const createTodoService = ({
   const createSubtask = async (todoId: string, title: string) => {
     const todo = await todoModel.findById(todoId);
     if (!todo) {
-      // TODO: Handle errors in main.ts
       throw new Error('Todo not found');
     }
     const maxOrder = todo.subtasks.reduce((acc, subtask) => {
