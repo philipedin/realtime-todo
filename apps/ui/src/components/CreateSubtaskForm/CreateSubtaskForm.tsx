@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Input, IconButton, Spacer } from '@chakra-ui/react';
+import { Stack, Input, IconButton } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 
 interface CreateSubtaskFormProps {
@@ -16,26 +16,25 @@ export const CreateSubtaskForm = ({ onSubmit }: CreateSubtaskFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(inputText);
+    setInputText('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack direction="row" spacing={2}>
-        <Input
-          flex={1}
-          size="sm"
-          placeholder="New subtask"
-          value={inputText}
-          onChange={handleTextChange}
-        />
-        <IconButton
-          type="submit"
-          aria-label="Add subtask"
-          size="sm"
-          icon={<AddIcon />}
-        />
-        <Spacer />
-      </Stack>
-    </form>
+    <Stack as="form" direction="row" spacing={2} onSubmit={handleSubmit}>
+      <Input
+        flex={1}
+        size="sm"
+        placeholder="New subtask"
+        value={inputText}
+        onChange={handleTextChange}
+      />
+      <IconButton
+        type="submit"
+        aria-label="Add subtask"
+        size="sm"
+        variant="ghost"
+        icon={<AddIcon />}
+      />
+    </Stack>
   );
 };

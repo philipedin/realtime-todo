@@ -7,6 +7,7 @@ import {
   Flex,
   Input,
   Box,
+  Spacer,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Todo } from '@realtime-todo/types';
@@ -134,9 +135,12 @@ export const TodoItem = ({
           )}
         </Stack>
       </Flex>
-      <Box pl={8}>
-        <SubtaskList todoId={_id} subtasks={subtasks} />
-      </Box>
+      <Flex pl={8}>
+        <Box flex={4}>
+          <SubtaskList todoId={_id} done={done} subtasks={subtasks} />
+        </Box>
+        <Spacer flex={5} />
+      </Flex>
     </>
   );
 };

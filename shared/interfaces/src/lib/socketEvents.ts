@@ -19,6 +19,20 @@ const reorderTodosSchema = z.object({
   order: z.array(z.string()),
 });
 const createSubtaskSchema = z.object({ todoId: z.string(), title: z.string() });
+const updateSubtaskSchema = z.object({
+  _id: z.string(),
+  subtaskId: z.string(),
+  update: z
+    .object({
+      done: z.boolean(),
+      title: z.string(),
+    })
+    .partial(),
+});
+const removeSubtaskSchema = z.object({
+  _id: z.string(),
+  subtaskId: z.string(),
+});
 
 export interface ClientToServerEvents {
   createTodo: ({ title }: z.infer<typeof createTodoSchema>) => void;
@@ -26,6 +40,15 @@ export interface ClientToServerEvents {
   removeTodo: ({ _id }: z.infer<typeof removeTodoSchema>) => void;
   reorderTodos: ({ order }: z.infer<typeof reorderTodosSchema>) => void;
   createSubtask: ({ title }: z.infer<typeof createSubtaskSchema>) => void;
+  updateSubtask: ({
+    _id,
+    subtaskId,
+    update,
+  }: z.infer<typeof updateSubtaskSchema>) => void;
+  removeSubtask: ({
+    _id,
+    subtaskId,
+  }: z.infer<typeof removeSubtaskSchema>) => void;
 }
 
 export interface ServerToClientEvents {
@@ -39,4 +62,6 @@ export const clientToServerSchemas: Partial<Record<string, z.AnyZodObject>> = {
   removeTodo: removeTodoSchema,
   reorderTodos: reorderTodosSchema,
   createSubtask: createSubtaskSchema,
+  updateSubtask: updateSubtaskSchema,
+  removeSubtask: removeSubtaskSchema,
 };

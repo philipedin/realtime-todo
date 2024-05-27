@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 
-import { Todo, Subtask, TodoUpdate } from '@realtime-todo/types';
+import { Todo, Subtask, TodoUpdate, SubtaskUpdate } from '@realtime-todo/types';
 
 export const createTodoService = ({
   todoModel,
@@ -55,6 +55,36 @@ export const createTodoService = ({
     return await todo.save();
   };
 
+  const updateSubtask = async (
+    id: string,
+    subtaskId: string,
+    update: SubtaskUpdate
+  ) => {
+    if (update.title !== undefined) {
+      return await todoModel.findOneAndUpdate(
+        { _id: id, 'subtasks._id': subtaskId },
+        { $set: { 'subtasks.$.title': update.title } },
+        { new: true }
+      );
+    }
+
+    if (update.done !== undefined) {
+      return await todoModel.findOneAndUpdate(
+        { _id: id, 'subtasks._id': subtaskId },
+        { $set: { 'subtasks.$.done': update.done } },
+        { new: true }
+      );
+    }
+  };
+
+  const removeSubtask = async (id: string, subtaskId: string) => {
+    return await todoModel.findOneAndUpdate(
+      { _id: id },
+      { $pull: { subtasks: { _id: subtaskId } } },
+      { new: true }
+    );
+  };
+
   return {
     listTodos,
     createTodo,
@@ -62,5 +92,7 @@ export const createTodoService = ({
     removeTodo,
     reorderTodos,
     createSubtask,
+    updateSubtask,
+    removeSubtask,
   };
 };

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TodoUpdate } from '@realtime-todo/types';
+import { SubtaskUpdate, TodoUpdate } from '@realtime-todo/types';
 
 import { TodoContext } from '../providers/TodoProvider';
 import { SocketContext } from '../providers/SocketProvider';
@@ -34,6 +34,23 @@ export const useTodos = () => {
     socket.emit('createSubtask', { todoId, title });
   };
 
+  const updateSubtask = (
+    _id: string,
+    subtaskId: string,
+    update: SubtaskUpdate
+  ) => {
+    console.log({
+      _id,
+      subtaskId,
+      update,
+    });
+    socket.emit('updateSubtask', { _id, subtaskId, update });
+  };
+
+  const removeSubtask = (_id: string, subtaskId: string) => {
+    socket.emit('removeSubtask', { _id, subtaskId });
+  };
+
   return {
     todos,
     createTodo,
@@ -41,5 +58,7 @@ export const useTodos = () => {
     removeTodo,
     reorderTodos,
     createSubtask,
+    removeSubtask,
+    updateSubtask,
   };
 };

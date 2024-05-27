@@ -12,7 +12,8 @@ import { createLogger } from './logger/logger';
 import { createHttpLogger } from './middleware/express/httpLogger';
 import { validateData } from './middleware/websockets/validateData';
 import { createTodoService } from './services/todo';
-import { SubtaskModel, TodoModel } from './models/todo';
+import { TodoModel } from './models/todo';
+import { SubtaskModel } from './models/subtask';
 import { db } from './db/db';
 
 const config = getConfig();
@@ -110,6 +111,30 @@ const main = async () => {
       } catch (error) {
         logger.error(error, 'Failed to create subtask');
         socket.emit('error', { message: 'Failed to create subtask' });
+      }
+    });
+
+    socket.on('updateSubtask', async ({ _id, subtaskId, update }) => {
+      try {
+        await todoService.updateSubtask(_id, subtaskId, update);
+        const todos = await todoService.listTodos();
+
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to update subtask');
+        socket.emit('error', { message: 'Failed to update subtask' });
+      }
+    });
+
+    socket.on('removeSubtask', async ({ _id, subtaskId }) => {
+      try {
+        await todoService.removeSubtask(_id, subtaskId);
+        const todos = await todoService.listTodos();
+
+        io.emit('todos', todos);
+      } catch (error) {
+        logger.error(error, 'Failed to remove subtask');
+        socket.emit('error', { message: 'Failed to remove subtask' });
       }
     });
 

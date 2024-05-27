@@ -1,36 +1,47 @@
-import { Stack, Flex, Checkbox, Text } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { Subtask } from '@realtime-todo/types';
 
 import { useTodos } from '../../hooks/useTodos';
 import { CreateSubtaskForm } from '../CreateSubtaskForm/CreateSubtaskForm';
+import { SubtaskItem } from '../SubtaskItem/SubtaskItem';
 
 interface SubtaskListProps {
   todoId: string;
+  done: boolean;
   subtasks: Subtask[];
 }
 
-export const SubtaskList = ({ todoId, subtasks }: SubtaskListProps) => {
-  const { createSubtask } = useTodos();
+export const SubtaskList = ({ todoId, done, subtasks }: SubtaskListProps) => {
+  const { createSubtask, updateSubtask, removeSubtask } = useTodos();
 
   const handleSubmit = (title: string) => {
     createSubtask(todoId, title);
   };
 
+  const handleToggle = (_id: string, done: boolean) => {
+    updateSubtask(todoId, _id, { done });
+  };
+
+  const handleUpdate = (_id: string, title: string) => {
+    updateSubtask(todoId, _id, { title });
+  };
+
+  const handleRemove = (_id: string) => {
+    removeSubtask(todoId, _id);
+  };
+
   return (
     <Stack spacing={2}>
       {subtasks.map((subtask) => (
-        <Flex key={subtask.title} alignItems="center">
-          <Checkbox size="sm" isChecked={subtask.done} />
-          <Text
-            ml={2}
-            color={subtask.done ? 'gray.500' : undefined}
-            textDecoration={subtask.done ? 'line-through' : undefined}
-          >
-            {subtask.title}
-          </Text>
-        </Flex>
+        <SubtaskItem
+          key={subtask._id}
+          onToggle={handleToggle}
+          onUpdate={handleUpdate}
+          onRemove={handleRemove}
+          {...subtask}
+        />
       ))}
-      <CreateSubtaskForm onSubmit={handleSubmit} />
+      {!done && <CreateSubtaskForm onSubmit={handleSubmit} />}
     </Stack>
   );
 };
