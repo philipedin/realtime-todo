@@ -12,7 +12,7 @@ import { createLogger } from './logger/logger';
 import { createHttpLogger } from './middleware/express/httpLogger';
 import { validateData } from './middleware/websockets/validateData';
 import { createTodoService } from './services/todo';
-import { TodoModel } from './models/todo';
+import { SubtaskModel, TodoModel } from './models/todo';
 import { db } from './db/db';
 
 const config = getConfig();
@@ -30,7 +30,10 @@ const main = async () => {
   app.use(httpLogger);
   app.use(cors());
 
-  const todoService = createTodoService(TodoModel);
+  const todoService = createTodoService({
+    todoModel: TodoModel,
+    subtaskModel: SubtaskModel,
+  });
   const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     cors: {
       origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
@@ -73,6 +76,13 @@ const main = async () => {
 
     socket.on('reorderTodos', async ({ order }) => {
       await todoService.reorderTodos(order);
+      const todos = await todoService.listTodos();
+
+      io.emit('todos', todos);
+    });
+
+    socket.on('createSubtask', async ({ todoId, title }) => {
+      await todoService.createSubtask(todoId, title);
       const todos = await todoService.listTodos();
 
       io.emit('todos', todos);

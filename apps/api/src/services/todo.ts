@@ -1,8 +1,14 @@
 import { Model } from 'mongoose';
 
-import { Todo, TodoUpdate } from '@realtime-todo/types';
+import { Todo, Subtask, TodoUpdate } from '@realtime-todo/types';
 
-export const createTodoService = (todoModel: Model<Todo>) => {
+export const createTodoService = ({
+  todoModel,
+  subtaskModel,
+}: {
+  todoModel: Model<Todo>;
+  subtaskModel: Model<Subtask>;
+}) => {
   const listTodos = async () => {
     return await todoModel.find().sort({ order: 1 });
   };
@@ -34,11 +40,28 @@ export const createTodoService = (todoModel: Model<Todo>) => {
     return await todoModel.bulkWrite(operations);
   };
 
+  const createSubtask = async (todoId: string, title: string) => {
+    const todo = await todoModel.findById(todoId);
+    if (!todo) {
+      // TODO: Handle errors in main.ts
+      throw new Error('Todo not found');
+    }
+    const maxOrder = todo.subtasks.reduce((acc, subtask) => {
+      return subtask.order > acc ? subtask.order : acc;
+    }, 0);
+    const newSubtask = new subtaskModel({ title, order: maxOrder + 1 });
+
+    todo.subtasks.push(newSubtask);
+
+    return await todo.save();
+  };
+
   return {
     listTodos,
     createTodo,
     updateTodo,
     removeTodo,
     reorderTodos,
+    createSubtask,
   };
 };

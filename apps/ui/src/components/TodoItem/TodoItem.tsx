@@ -6,9 +6,11 @@ import {
   IconButton,
   Flex,
   Input,
+  Box,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Todo } from '@realtime-todo/types';
+import { SubtaskList } from '../SubtaskList/SubtaskList';
 
 interface TodoItemProps extends Todo {
   onToggle: (id: string, done: boolean) => void;
@@ -20,6 +22,7 @@ export const TodoItem = ({
   _id,
   title,
   done,
+  subtasks,
   onToggle,
   onUpdate,
   onRemove,
@@ -55,80 +58,85 @@ export const TodoItem = ({
   };
 
   return (
-    <Flex p={2} justifyContent="space-between">
-      <Flex alignItems="center" flex={1}>
-        <Checkbox
-          mr={2}
-          size="lg"
-          isChecked={done}
-          onChange={() => onToggle(_id, !done)}
-        />
-        {isEditing ? (
-          <Input
-            flex={1}
+    <>
+      <Flex p={2} justifyContent="space-between">
+        <Flex alignItems="center" flex={1}>
+          <Checkbox
             mr={2}
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-            onBlur={(e) => {
-              if (
-                e.relatedTarget !== confirmButtonRef.current &&
-                e.relatedTarget !== cancelButtonRef.current
-              ) {
-                handleBlur();
-              }
-            }}
-            onKeyDown={handleKeyDown}
-            autoFocus
+            size="lg"
+            isChecked={done}
+            onChange={() => onToggle(_id, !done)}
           />
-        ) : (
-          <Text
-            flex={1}
-            mr={2}
-            fontWeight="bold"
-            color={done ? 'gray.500' : undefined}
-            onClick={() => {
-              if (!done) setIsEditing(true);
-            }}
-          >
-            {title}
-          </Text>
-        )}
+          {isEditing ? (
+            <Input
+              flex={1}
+              mr={2}
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onBlur={(e) => {
+                if (
+                  e.relatedTarget !== confirmButtonRef.current &&
+                  e.relatedTarget !== cancelButtonRef.current
+                ) {
+                  handleBlur();
+                }
+              }}
+              onKeyDown={handleKeyDown}
+              autoFocus
+            />
+          ) : (
+            <Text
+              flex={1}
+              mr={2}
+              fontWeight="bold"
+              color={done ? 'gray.500' : undefined}
+              onClick={() => {
+                if (!done) setIsEditing(true);
+              }}
+            >
+              {title}
+            </Text>
+          )}
+        </Flex>
+        <Stack direction="row">
+          {isEditing ? (
+            <>
+              <IconButton
+                ref={confirmButtonRef}
+                aria-label="Confirm edit"
+                colorScheme="green"
+                icon={<CheckIcon />}
+                onClick={handleConfirmEdit}
+              />
+              <IconButton
+                ref={cancelButtonRef}
+                aria-label="Cancel edit"
+                colorScheme="red"
+                icon={<CloseIcon />}
+                onClick={handleCancelEdit}
+              />
+            </>
+          ) : (
+            <>
+              <IconButton
+                isDisabled={done}
+                aria-label="Edit title"
+                icon={<EditIcon />}
+                onClick={() => setIsEditing(true)}
+              />
+              <IconButton
+                aria-label="Remove todo"
+                colorScheme="red"
+                icon={<DeleteIcon />}
+                onClick={handleRemove}
+              />
+            </>
+          )}
+        </Stack>
       </Flex>
-      <Stack direction="row">
-        {isEditing ? (
-          <>
-            <IconButton
-              ref={confirmButtonRef}
-              aria-label="Confirm edit"
-              colorScheme="green"
-              icon={<CheckIcon />}
-              onClick={handleConfirmEdit}
-            />
-            <IconButton
-              ref={cancelButtonRef}
-              aria-label="Cancel edit"
-              colorScheme="red"
-              icon={<CloseIcon />}
-              onClick={handleCancelEdit}
-            />
-          </>
-        ) : (
-          <>
-            <IconButton
-              isDisabled={done}
-              aria-label="Edit title"
-              icon={<EditIcon />}
-              onClick={() => setIsEditing(true)}
-            />
-            <IconButton
-              aria-label="Remove todo"
-              colorScheme="red"
-              icon={<DeleteIcon />}
-              onClick={handleRemove}
-            />
-          </>
-        )}
-      </Stack>
-    </Flex>
+      <Box pl={8}>
+        <SubtaskList todoId={_id} subtasks={subtasks} />
+      </Box>
+    </>
   );
 };

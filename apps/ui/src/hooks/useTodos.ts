@@ -30,5 +30,16 @@ export const useTodos = () => {
     socket.emit('reorderTodos', { order });
   };
 
-  return { todos, createTodo, updateTodo, removeTodo, reorderTodos };
+  const createSubtask = (todoId: string, title: string) => {
+    socket.emit('createSubtask', { todoId, title });
+  };
+
+  return {
+    todos,
+    createTodo,
+    updateTodo,
+    removeTodo,
+    reorderTodos,
+    createSubtask,
+  };
 };
