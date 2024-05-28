@@ -36,6 +36,7 @@ Run `npm run build:ui` to build the UI. The build artifacts are stored in the ou
 ## Running tests
 
 Run `npm run test:ui` to run the UI tests.
+Run `npm run test:api` to run the API tests.
 
 ## Potential issues
 
