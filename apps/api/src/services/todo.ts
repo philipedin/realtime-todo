@@ -2,6 +2,8 @@ import { Model } from 'mongoose';
 
 import { Todo, Subtask, TodoUpdate, SubtaskUpdate } from '@realtime-todo/types';
 
+export type TodoService = ReturnType<typeof createTodoService>;
+
 export const createTodoService = ({
   todoModel,
   subtaskModel,
