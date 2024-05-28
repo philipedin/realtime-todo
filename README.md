@@ -1,5 +1,20 @@
 # Realtime Todo
 
+## Implemented Stories
+
+- I as a user can create to-do items, such as a grocery list.
+- I as another user can collaborate in real-time with user - so that we
+  can (for example) edit our family shopping-list together.
+- I as a user can mark to-do items as “done” - so that I can avoid clutter and focus on
+  things that are still pending.
+- I as a user can filter the to-do list and view items that were marked as done - so that I
+  can retrospect on my prior progress.
+- I as a user can add sub-tasks to my to-do items - so that I could make logical groups
+  of tasks and see their overall progress.
+- I as a user can change the order of tasks via drag & drop
+- I as a user can be sure that my todos will be persisted so that important information
+  is not lost when server restarts
+
 ## Prerequisites
 
 - [Node v20](https://nodejs.org/en/download/)
