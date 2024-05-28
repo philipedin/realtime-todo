@@ -6,7 +6,11 @@ export const NetworkStatusIndicator = () => {
   const { isInitialized, isConnected } = useSocket();
 
   return (
-    <Slide in={isInitialized && !isConnected} direction="bottom">
+    <Slide
+      data-testid="network-status-indicator"
+      in={isInitialized && !isConnected}
+      direction="bottom"
+    >
       <Box color="white" bg="red.500" p={2}>
         You are currently offline.
       </Box>

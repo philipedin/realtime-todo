@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { SubtaskUpdate, TodoUpdate } from '@realtime-todo/types';
 
-import { TodoContext } from '../providers/TodoProvider';
-import { SocketContext } from '../providers/SocketProvider';
+import { TodoContext } from '../providers/TodoProvider/TodoProvider';
+import { SocketContext } from '../providers/SocketProvider/SocketProvider';
 
 export const useTodos = () => {
   const todos = useContext(TodoContext);

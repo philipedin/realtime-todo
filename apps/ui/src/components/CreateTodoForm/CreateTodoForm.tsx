@@ -19,7 +19,7 @@ export const CreateTodoForm = ({ onSubmit }: CreateTodoFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} data-testid="create-todo-form">
       <Stack direction="row" spacing={2}>
         <Input
           flex={1}

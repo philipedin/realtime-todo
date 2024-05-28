@@ -6,7 +6,7 @@ import { Todo } from '@realtime-todo/types';
 
 import { TodoItem } from '../TodoItem/TodoItem';
 
-interface TodoListProps {
+export interface TodoListProps {
   todos: Todo[];
   onToggle: (id: string, done: boolean) => void;
   onUpdate: (id: string, title: string) => void;
@@ -39,6 +39,7 @@ export const TodoList = ({
 
   return (
     <Stack
+      data-testid="todo-list"
       as={Reorder.Group<Todo>}
       spacing={4}
       axis="y"

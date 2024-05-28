@@ -13,7 +13,7 @@ import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Todo } from '@realtime-todo/types';
 import { SubtaskList } from '../SubtaskList/SubtaskList';
 
-interface TodoItemProps extends Todo {
+export interface TodoItemProps extends Todo {
   onToggle: (id: string, done: boolean) => void;
   onUpdate: (id: string, title: string) => void;
   onRemove: (id: string) => void;

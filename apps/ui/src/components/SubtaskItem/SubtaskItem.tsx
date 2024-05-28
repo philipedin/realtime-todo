@@ -3,7 +3,7 @@ import { Flex, Checkbox, Text, IconButton, Input } from '@chakra-ui/react';
 import { Subtask } from '@realtime-todo/types';
 import { useState } from 'react';
 
-interface SubtaskItemProps extends Subtask {
+export interface SubtaskItemProps extends Subtask {
   onToggle: (id: string, done: boolean) => void;
   onUpdate: (id: string, title: string) => void;
   onRemove: (id: string) => void;
@@ -81,7 +81,7 @@ export const SubtaskItem = ({
         ml={2}
         size="sm"
         variant="ghost"
-        aria-label="Remove todo"
+        aria-label="Remove subtask"
         colorScheme="red"
         icon={<DeleteIcon />}
         onClick={handleRemove}

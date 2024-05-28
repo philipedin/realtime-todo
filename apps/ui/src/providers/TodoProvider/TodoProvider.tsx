@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { SocketContext } from './SocketProvider';
+import { SocketContext } from '../SocketProvider/SocketProvider';
 import { Todo } from '@realtime-todo/types';
 
 interface TodoProviderProps {

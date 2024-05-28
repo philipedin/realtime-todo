@@ -9,7 +9,11 @@ export const TodoFilterSwitch = ({
   showDone,
   onToggle,
 }: TodoFilterSwitchProps) => (
-  <FormControl display="flex" alignItems="center">
+  <FormControl
+    data-testid="todo-filter-switch"
+    display="flex"
+    alignItems="center"
+  >
     <FormLabel htmlFor="show-done-switch" mb={0} ml={2} mr={4}>
       <Text fontWeight="semibold">Not Completed</Text>
     </FormLabel>
